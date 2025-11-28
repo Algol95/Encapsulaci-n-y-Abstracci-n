@@ -9,6 +9,7 @@ public class DyDService {
 
         Player p = new Player(sc.nextLine(), 100, 15, 25, 0.2f);
         Enemy e = new Enemy("Dragón", 200, 10, 25);
+        CombatService combat = new CombatService();
 
         System.out.println("\n¡Hola " + p.getName() + "! Te enfrentas a un dragón feroz.");
 
@@ -17,8 +18,7 @@ public class DyDService {
             int action = sc.nextInt();
             switch (action) {
                 case 1 -> {
-                    int damageToEnemy = p.attacking(e.getDefense());
-                    e.receiveDamage(damageToEnemy);
+                    combat.playerAttack(p, e);
                 }
                 case 2 -> {
                     p.setDefending(true);
@@ -29,7 +29,7 @@ public class DyDService {
             if (!e.isAlive()) {
                 System.out.println("¡Has derrotado al dragón! ¡Felicidades, " + p.getName() + "!");
             } else {
-                p.receiveDamage(e.getAttack());
+                combat.enemyAttack(p, e);
                 p.setDefending(false);
             }
 

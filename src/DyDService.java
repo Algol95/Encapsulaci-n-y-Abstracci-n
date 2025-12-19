@@ -39,7 +39,7 @@ public class DyDService {
         int action = sc.nextInt();
         switch (action) {
             case 1 -> {
-                dService.playerAttack(p, e);
+                dService.entityAttack(p, e);
             }
             case 2 -> {
                 p.setDefending(true);
@@ -58,7 +58,7 @@ public class DyDService {
         if (!e.isAlive()) {
             System.out.println("¡Has derrotado al dragón! ¡Felicidades, " + p.getName() + "!");
         } else {
-            dService.enemyAttack(e, p);
+            dService.entityAttack(e, p);
             p.setDefending(false);
         }
         if (!p.isAlive()) {

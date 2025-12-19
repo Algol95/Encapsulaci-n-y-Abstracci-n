@@ -21,99 +21,60 @@ public class DamageService {
     }
 
     /**
-     * Método para calcular el daño total que un jugador inflige a un enemigo.
+     * Método para calcular el daño que hace una entidad a otra.
      * 
-     * @param p Player - El jugador que realiza el ataque.
-     * @param e Enemy - La entidad enemiga
-     * @return int El daño total infligido al enemigo.
+     * @param attacker Entity - La entidad que realiza el ataque.
+     * @param defender Entity - La entidad que recibe el ataque.
+     * @return int - El daño calculado.
      */
-    public int computeDamagePlayer(Player p, Enemy e) {
-        int damageTotal = p.getAttack() - e.getDefense();
-
+    public int computeDamageEntity(Entity attacker, Entity defender) {
+        int damageTotal = attacker.getAttack() - defender.getDefense();
         if (damageTotal < 0)
             damageTotal = 0;
 
-        if (isCriticalHit(p)) {
-            damageTotal *= 2;
-            System.out.println("\n¡Golpe crítico!");
+        if (attacker instanceof Player) {
+            if (isCriticalHit((Player) attacker)) {
+                damageTotal *= 2;
+                System.out.println("\n¡Golpe crítico!");
+            }
+        } else {
+            if (((Player) defender).isDefending()) {
+                damageTotal /= 2;
+                ((Player) defender).setCriticalBonus(((Player) defender).getCriticalBonus() + .15f);
+            }
         }
-
         return damageTotal;
     }
 
     /**
-     * Método para que un jugador ataque a un enemigo.
+     * Método para que una entidad ataque a otra.
      * 
-     * @param p Player - El jugador que realiza el ataque.
-     * @param e Enemy - La entidad enemiga
+     * @param attacker Entity - La entidad que realiza el ataque.
+     * @param defender Entity - La entidad que recibe el ataque.
      */
-    public void playerAttack(Player p, Enemy e) {
-        int damage = computeDamagePlayer(p, e);
-        System.out.println("\n" + p.getName() + " ataca causando " + damage + " puntos de daño.");
-        applyDamageToEnemy(e, damage);
-
+    public void entityAttack(Entity attacker, Entity defender) {
+        int damage = computeDamageEntity(attacker, defender);
+        System.out.println("\n" + attacker.getName() + " ataca causando " + damage + " puntos de daño.");
+        applyDamageToEntity(defender, damage);
     }
 
     /**
-     * Método para aplicar daño a un enemigo.
+     * Método para aplicar daño a una entidad.
      * 
-     * @param e      Enemy - La entidad enemiga.
+     * @param ent    Entity - La entidad que recibe el daño.
      * @param damage int - El daño a aplicar.
      */
-    public void applyDamageToEnemy(Enemy e, int damage) {
-        int newHealth = e.getHealth() - damage;
-
+    public void applyDamageToEntity(Entity ent, int damage) {
+        int newHealth = ent.getHealth() - damage;
         if (newHealth < 0)
             newHealth = 0;
-        e.setHealth(newHealth);
-        System.out.println("\nLa salud restante de " + e.getName() + " es: " + e.getHealth());
-    }
+        ent.setHealth(newHealth);
 
-    /**
-     * Método para que un enemigo ataque a un jugador.
-     * 
-     * @param e Enemy - La entidad enemiga.
-     * @param p Player - El jugador que recibe el ataque.
-     */
-    public void enemyAttack(Enemy e, Player p) {
-        int damage = computeDamageEnemy(e, p);
-        System.out.println("\n" + e.getName() + " ataca causando " + damage + " puntos de daño.");
-        applyDamageToPlayer(p, damage);
-    }
-
-    /**
-     * Método para aplicar daño a un jugador.
-     * 
-     * @param p      Player - El jugador.
-     * @param damage int - El daño a aplicar.
-     */
-    private void applyDamageToPlayer(Player p, int damage) {
-        p.setHealth(p.getHealth() - damage);
-        System.out.println("\nLa salud restante de " + p.getName() + " es: " + p.getHealth());
-    }
-
-    /**
-     * Método para calcular el daño total que un enemigo inflige a un jugador.
-     * 
-     * @param e Enemey - El enemigo que realiza el ataque.
-     * @param p Player - El jugador que recibe el ataque.
-     * @return int El daño total infligido al jugador.
-     */
-    public int computeDamageEnemy(Enemy e, Player p) {
-        int damageTotal = e.getAttack() - p.getDefense();
-
-        if (damageTotal < 0)
-            damageTotal = 0;
-
-        if (p.isDefending()) {
-            damageTotal /= 2;
-            p.setCriticalBonus(p.getCriticalBonus() + .15f);
-            System.out.println(
-                    "\n¡" + p.getName() + " se está defendiendo! La probabilidad de golpe crítico ha aumentado a: "
-                            + (p.getCriticalChance() + p.getCriticalBonus()) * 100 + "%");
+        if (ent instanceof Enemy) {
+            System.out.println("La salud restante del " + ent.getName() + " es: " + ent.getHealth());
+        } else {
+            System.out.println("\nLa salud restante de nuestro heroe " + ent.getName() + " es: " + ent.getHealth());
         }
-
-        return damageTotal;
     }
 
 }

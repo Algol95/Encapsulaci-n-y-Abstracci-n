@@ -53,18 +53,6 @@ public class Enemy {
     }
 
     /**
-     * Método para recibir daño.
-     * 
-     * @param damage daño recibido
-     */
-    public void receiveDamage(int damage) {
-        this.health -= (damage - defense);
-        if (health < 0)
-            health = 0;
-        System.out.println(name + " ha recibido " + (damage - defense) + " puntos de daño. Salud restante: " + health);
-    }
-
-    /**
      * Método para verificar si el enemigo está vivo.
      * 
      * @return true si la salud es mayor que 0, false en caso contrario.

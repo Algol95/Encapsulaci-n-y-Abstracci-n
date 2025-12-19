@@ -50,8 +50,7 @@ public class DamageService {
     public void playerAttack(Player p, Enemy e) {
         int damage = computeDamagePlayer(p, e);
         System.out.println("\n" + p.getName() + " ataca causando " + damage + " puntos de daño.");
-        applyDamageToEnemy(e, damage);
-
+        applyDamageToEntity(e, damage);
     }
 
     /**
@@ -60,9 +59,8 @@ public class DamageService {
      * @param e      Enemy - La entidad enemiga.
      * @param damage int - El daño a aplicar.
      */
-    public void applyDamageToEnemy(Enemy e, int damage) {
+    private void applyDamageToEntity(Entity e, int damage) {
         int newHealth = e.getHealth() - damage;
-
         if (newHealth < 0)
             newHealth = 0;
         e.setHealth(newHealth);
@@ -78,18 +76,7 @@ public class DamageService {
     public void enemyAttack(Enemy e, Player p) {
         int damage = computeDamageEnemy(e, p);
         System.out.println("\n" + e.getName() + " ataca causando " + damage + " puntos de daño.");
-        applyDamageToPlayer(p, damage);
-    }
-
-    /**
-     * Método para aplicar daño a un jugador.
-     * 
-     * @param p      Player - El jugador.
-     * @param damage int - El daño a aplicar.
-     */
-    private void applyDamageToPlayer(Player p, int damage) {
-        p.setHealth(p.getHealth() - damage);
-        System.out.println("\nLa salud restante de " + p.getName() + " es: " + p.getHealth());
+        applyDamageToEntity(p, damage);
     }
 
     /**

@@ -64,7 +64,12 @@ public class DamageService {
         if (newHealth < 0)
             newHealth = 0;
         e.setHealth(newHealth);
-        System.out.println("\nLa salud restante de " + e.getName() + " es: " + e.getHealth());
+        if (e instanceof Enemy) {
+            System.out.println("\n" + e.getName() + " tiene " + e.getHealth() + " puntos de salud restantes.");
+        } else {
+            System.out.println("\nLa salud de nuestro heroe " + e.getName() + " es: " + e.getHealth());
+        }
+
     }
 
     /**

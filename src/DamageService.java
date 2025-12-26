@@ -34,7 +34,12 @@ public class DamageService {
 
         if (attacker instanceof Player) {
             if (isCriticalHit((Player) attacker)) {
-                damageTotal *= 2;
+                if (attacker instanceof Archer) {
+                    damageTotal *= 3;
+                } else {
+                    damageTotal *= 2;
+                }
+
                 System.out.println("\n¡Golpe crítico!");
             }
         } else {
@@ -54,6 +59,15 @@ public class DamageService {
      */
     public void entityAttack(Entity attacker, Entity defender) {
         int damage = computeDamageEntity(attacker, defender);
+        if (attacker instanceof Mage) {
+            if (((Mage) attacker).isCastingFireball()) {
+                damage += 40;
+            } else if (((Mage) attacker).isCastFailed()) {
+                damage = 0;
+                ((Mage) attacker).setCastFailed(false);
+            }
+        }
+
         System.out.println("\n" + attacker.getName() + " ataca causando " + damage + " puntos de daño.");
         applyDamageToEntity(defender, damage);
     }
